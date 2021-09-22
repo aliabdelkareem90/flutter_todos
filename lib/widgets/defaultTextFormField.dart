@@ -10,6 +10,7 @@ class DefaultTextFormField extends StatelessWidget {
   TextEditingController controller;
   @required
   TextInputType type;
+  int maxLength;
   @required
   Function onSubmitted;
   @required
@@ -23,6 +24,7 @@ class DefaultTextFormField extends StatelessWidget {
     this.iconData,
     this.controller,
     this.type,
+    this.maxLength,
     this.onSubmitted,
     this.onSaved,
     this.validate,
@@ -34,14 +36,17 @@ class DefaultTextFormField extends StatelessWidget {
     return Container(
       child: TextFormField(
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.grey[100],
           labelText: label,
           prefixIcon: Icon(iconData),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
         keyboardType: type,
         controller: controller,
+        maxLength: maxLength,
         onFieldSubmitted: onSubmitted,
         onSaved: onSaved,
         onTap: onTap,

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo_app/cubit/app-cubit.dart';
 import 'package:flutter_todo_app/cubit/app-states.dart';
-import 'package:flutter_todo_app/widgets/defaultTextFormField.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_todo_app/widgets/bottomSheet-form.dart';
 
 class HomeLayout extends StatelessWidget {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController titleController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
@@ -65,6 +65,7 @@ class HomeLayout extends StatelessWidget {
                       date: dateController.text,
                       time: timeController.text,
                       title: titleController.text,
+                      desc: descController.text,
                     )
                         .then(
                       (value) {
@@ -75,91 +76,20 @@ class HomeLayout extends StatelessWidget {
                       },
                     );
                     titleController.text = '';
+                    descController.text = '';
                     timeController.text = '';
                     dateController.text = '';
                   }
                 } else {
                   _scaffoldKey.currentState
-                      .showBottomSheet(
-                        (context) => Form(
-                          key: _formKey,
-                          child: Container(
-                            color: Colors.white,
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                DefaultTextFormField(
-                                  controller: titleController,
-                                  label: 'Task Title',
-                                  iconData: Icons.title,
-                                  type: TextInputType.text,
-                                  onSubmitted: (String value) {
-                                    titleController.text = value;
-                                  },
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'Title is required';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 15.0,
-                                ),
-                                DefaultTextFormField(
-                                  controller: timeController,
-                                  label: 'Task Time',
-                                  iconData: Icons.watch_later_outlined,
-                                  type: TextInputType.datetime,
-                                  onTap: () {
-                                    showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                    ).then((value) {
-                                      timeController.text =
-                                          value.format(context).toString();
-                                    });
-                                  },
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'Time is required';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 15.0,
-                                ),
-                                DefaultTextFormField(
-                                  controller: dateController,
-                                  label: 'Task Date',
-                                  iconData: Icons.calendar_today_outlined,
-                                  type: TextInputType.datetime,
-                                  onTap: () {
-                                    showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.now(),
-                                      lastDate: DateTime.parse('2030-12-31'),
-                                    ).then(
-                                      (value) {
-                                        dateController.text =
-                                            DateFormat.yMMMd().format(value);
-                                        // print(dateController.text);
-                                      },
-                                    );
-                                  },
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'Date is required';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                      .showBottomSheet((context) =>
+                        bottomSheetForm(
+                          context: context,
+                          formKey: _formKey,
+                          titleController: titleController,
+                          descController: descController,
+                          timeController: timeController,
+                          dateController: dateController,
                         ),
                         elevation: 10.0,
                       )

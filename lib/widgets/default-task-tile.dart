@@ -6,13 +6,11 @@ import 'package:flutter_todo_app/widgets/snackbar.dart';
 
 Widget defaultTaskTile(BuildContext context, Map map) {
   List<MaterialColor> colors = [
-    Colors.green,
-    Colors.blue,
     Colors.red,
     Colors.orange,
-    Colors.purple,
+    Colors.green,
   ];
-  //TODO: Replace Dismissible with Slider
+
   return Slidable(
     actionPane: SlidableDrawerActionPane(),
     actions: <Widget>[
@@ -82,7 +80,7 @@ Widget defaultTaskTile(BuildContext context, Map map) {
                       ),
                     ),
                     Text(
-                      'This is task description',
+                      '${map['desc']}',
                       style: TextStyle(
                         fontSize: 15.0,
                         color: Colors.black45
